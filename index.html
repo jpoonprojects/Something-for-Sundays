@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Something for Sundays</title>
+  <meta name="description" content="A pocket devotional mailed to your door each month — exploring spiritual practices from around the world." />
+
+  <!-- Social share preview -->
+  <meta property="og:title" content="Something for Sundays" />
+  <meta property="og:description" content="A pocket devotional mailed to your door each month — exploring spiritual practices from around the world." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="banner.png" />
+
+  <style>
+    :root {
+      --blue: #A9C6D6;
+      --green: #2C3E2D;
+      --green-soft: #3d5245;
+      --orange: #D4541A;
+      --cream: #FDFBF5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--blue);
+      color: var(--green);
+      font-family: Georgia, 'Times New Roman', serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1.5rem 0 0.5rem;
+    }
+    nav button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--green-soft);
+      padding-bottom: 0.25rem;
+    }
+    nav button.active {
+      color: var(--green);
+      border-bottom: 2px solid var(--green);
+    }
+    main {
+      max-width: 32rem;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    .header { text-align: center; margin-bottom: 2rem; }
+    .logo {
+      width: 7rem; height: 7rem;
+      border-radius: 9999px;
+      object-fit: cover;
+      margin: 0 auto 1rem;
+      display: block;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    }
+    .banner {
+      width: 100%;
+      max-width: 24rem;
+      margin: 0 auto 0.75rem;
+      display: block;
+    }
+    .tagline {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      max-width: 20rem;
+      margin: 0 auto;
+    }
+    .product-line {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      max-width: 22rem;
+      margin: 0.75rem auto 0;
+      font-weight: bold;
+    }
+    .card {
+      background: rgba(253, 251, 245, 0.85);
+      border: 1px solid rgba(44, 62, 45, 0.15);
+      border-radius: 0.5rem;
+      padding: 1.25rem;
+    }
+    .notice {
+      text-align: center;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .form-row { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; }
+    input {
+      width: 100%;
+      border: 1px solid rgba(44, 62, 45, 0.2);
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: white;
+      color: var(--green);
+    }
+    input:focus { outline: none; border-color: var(--green); }
+    .btn {
+      width: 100%;
+      padding: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background: var(--green);
+      color: white;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      margin-top: 0.75rem;
+    }
+    .btn:disabled { opacity: 0.7; cursor: default; }
+    .error { color: #c0392b; font-size: 0.85rem; margin-top: 0.5rem; }
+    .how { margin-top: 2rem; }
+    .how h2 { font-size: 1rem; margin-bottom: 0.75rem; }
+    .how ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .how li { display: flex; gap: 0.5rem; font-size: 0.9rem; color: var(--green-soft); line-height: 1.5; }
+    .how li span { color: var(--orange); }
+    .success { text-align: center; padding: 2rem; }
+    .success .icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .success h2 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+    .success p { font-size: 0.9rem; color: var(--green-soft); line-height: 1.5; }
+    .photos { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .photos-row { display: flex; gap: 0.5rem; }
+    .photos img { border-radius: 0.5rem; object-fit: cover; display: block; width: 100%; }
+    .photos .photo-full { aspect-ratio: 3/4; }
+    .photos-row img { width: 50%; aspect-ratio: 3/4; }
+    .socials { display: flex; justify-content: center; gap: 1.5rem; margin-top: 2rem; }
+    .socials a { color: var(--green); text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+    .socials a:hover { color: var(--orange); }
+    footer { text-align: center; padding-bottom: 2rem; margin-top: 1rem; }
+    footer p { font-size: 0.72rem; color: var(--green-soft); }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <nav>
+    <button id="tab-home" class="active" onclick="showTab('home')">Home</button>
+    <button id="tab-about" onclick="showTab('about')">About</button>
+  </nav>
+
+  <main>
+    <div class="header">
+      <img src="banner.png" alt="Something for Sundays" class="banner" />
+      <p class="tagline">Exploring spirituality, creativity, and thoughtful living post faith deconstruction ✨</p>
+      <p class="product-line">A pocket devotional mailed to your door each month — exploring spiritual practices from around the world.</p>
+    </div>
+
+    <!-- HOME TAB -->
+    <div id="home">
+      <div id="form-view">
+        <div class="card notice">
+          Join the waitlist to get notified when subscriptions are available.
+        </div>
+
+        <div>
+          <div class="form-row">
+            <input id="firstName" type="text" placeholder="First name" />
+            <input id="lastName" type="text" placeholder="Last name" />
+          </div>
+          <input id="email" type="email" placeholder="Email address" />
+          <p id="error" class="error hidden"></p>
+          <button id="submitBtn" class="btn" onclick="submitForm()">Join the Waitlist</button>
+        </div>
+
+        <div class="card how">
+          <h2>How it works</h2>
+          <ul>
+            <li><span>›</span> A pocket devotional, mailed to your door each month</li>
+            <li><span>›</span> Exploring spiritual practices and traditions from around the world</li>
+            <li><span>›</span> Sign up by the 20th to receive next month's mail</li>
+            <li><span>›</span> Get notified when subscriptions are available</li>
+          </ul>
+        </div>
+
+        <div class="photos">
+          <img src="IMG_6228.JPG" alt="Something for Sundays Vol. 1" class="photo-full" />
+          <div class="photos-row">
+            <img src="IMG_6231.JPG" alt="Holding the devotional" />
+            <img src="IMG_6257.JPG" alt="Something for Sundays outdoors" />
+          </div>
+        </div>
+
+        <div class="socials">
+          <a href="https://somethingforsundays.substack.com" target="_blank" rel="noopener noreferrer">Substack</a>
+        </div>
+      </div>
+
+      <div id="success-view" class="card success hidden">
+        <div class="icon">✉️</div>
+        <h2>You're on the list!</h2>
+        <p>Thank you for joining the waitlist. We'll send you an email when subscriptions are available.</p>
+      </div>
+    </div>
+
+    <!-- ABOUT TAB -->
+    <div id="about" class="hidden">
+      <div class="card">
+        <h2 style="font-size:1.25rem;margin-bottom:1rem;">About the Club</h2>
+        <p style="font-size:0.9rem;color:var(--green-soft);line-height:1.6;">
+          Something for Sundays is a monthly pocket devotional, mailed to your door —
+          exploring spiritual practices and traditions from around the world.
+          A small, tactile ritual for the thoughtful and the curious.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© <span id="year"></span> Something for Sundays</p>
+  </footer>
+
+  <script>
+    // --- Supabase config (anon key is safe to expose in the browser) ---
+    const SUPABASE_URL = 'https://ffkirzjdtfrghnlwqzdw.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZma2lyempkdGZyZ2hubHdxemR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NTA0OTAsImV4cCI6MjA5NjAyNjQ5MH0.KEifGa_Oyn9gGwiGv-mjFOoUrWTzmkk-anHXaCaXcp8';
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function showTab(tab) {
+      document.getElementById('home').classList.toggle('hidden', tab !== 'home');
+      document.getElementById('about').classList.toggle('hidden', tab !== 'about');
+      document.getElementById('tab-home').classList.toggle('active', tab === 'home');
+      document.getElementById('tab-about').classList.toggle('active', tab === 'about');
+    }
+
+    async function submitForm() {
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const errorEl = document.getElementById('error');
+      const btn = document.getElementById('submitBtn');
+
+      errorEl.classList.add('hidden');
+
+      if (!email) {
+        errorEl.textContent = 'Please enter your email.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Joining...';
+
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Prefer': 'return=minimal',
+          },
+          body: JSON.stringify({
+            email: email,
+            first_name: firstName,
+            last_name: lastName,
+            tier: 'domestic',
+            status: 'pending',
+          }),
+        });
+
+        if (res.ok) {
+          showSuccess();
+        } else if (res.status === 409) {
+          // duplicate email — already on the list, treat as success
+          showSuccess();
+        } else {
+          const text = await res.text();
+          console.error('Waitlist error:', res.status, text);
+          errorEl.textContent = 'Something went wrong. Please try again.';
+          errorEl.classList.remove('hidden');
+          btn.disabled = false;
+          btn.textContent = 'Join the Waitlist';
+        }
+      } catch (err) {
+        console.error(err);
+        errorEl.textContent = 'Something went wrong. Please try again.';
+        errorEl.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Join the Waitlist';
+      }
+    }
+
+    function showSuccess() {
+      document.getElementById('form-view').classList.add('hidden');
+      document.getElementById('success-view').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
