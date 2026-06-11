@@ -124,6 +124,16 @@
       margin-top: 0.75rem;
     }
     .btn:disabled { opacity: 0.7; cursor: default; }
+    .btn-link {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--green);
+      border: 2px solid var(--green);
+    }
     .error { color: #c0392b; font-size: 0.85rem; margin-top: 0.5rem; }
     .how { margin-top: 2rem; }
     .how h2 { font-size: 1rem; margin-bottom: 0.75rem; }
@@ -166,17 +176,12 @@
       <div id="form-view">
         <img src="IMG_6231.JPG" alt="Something for Sundays Vol. 1" class="hero-photo" style="margin-bottom:1.25rem;" />
         <div class="card notice">
-          Join the waitlist to get notified when subscriptions are available.
+          Subscriptions are open! Choose your plan below — delivered to your door each month.
         </div>
 
         <div>
-          <div class="form-row">
-            <input id="firstName" type="text" placeholder="First name" />
-            <input id="lastName" type="text" placeholder="Last name" />
-          </div>
-          <input id="email" type="email" placeholder="Email address" />
-          <p id="error" class="error hidden"></p>
-          <button id="submitBtn" class="btn" onclick="submitForm()">Join the Waitlist</button>
+          <a class="btn btn-link" href="https://buy.stripe.com/4gMfZgfVsdQa7RB7ITd7q00">Subscribe — US · $8/month</a>
+          <a class="btn btn-link btn-outline" href="https://buy.stripe.com/3cI5kCgZwfYi7RB0grd7q01">Subscribe — International · $12/month</a>
           <img src="IMG_5342.png" alt="" style="width:100%;display:block;margin:1.25rem auto 0;opacity:0.85;" />
         </div>
 
@@ -186,7 +191,7 @@
             <li><span>›</span> A pocket devotional, mailed to your door each month</li>
             <li><span>›</span> Exploring spiritual practices and traditions from around the world</li>
             <li><span>›</span> Sign up by the 20th to receive next month's mail</li>
-            <li><span>›</span> Get notified when subscriptions are available</li>
+            <li><span>›</span> Cancel anytime</li>
           </ul>
         </div>
 
@@ -200,8 +205,8 @@
 
       <div id="success-view" class="card success hidden">
         <div class="icon">✉️</div>
-        <h2>You're on the list!</h2>
-        <p>Thank you for joining the waitlist. We'll send you an email when subscriptions are available.</p>
+        <h2>Welcome to the club!</h2>
+        <p>Your subscription is confirmed — a receipt is on its way to your inbox. Your first issue will be in the mail soon. Thank you for being here. ✨</p>
       </div>
     </div>
 
@@ -233,10 +238,6 @@
   </footer>
 
   <script>
-    // --- Supabase config (anon key is safe to expose in the browser) ---
-    const SUPABASE_URL = 'https://ffkirzjdtfrghnlwqzdw.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZma2lyempkdGZyZ2hubHdxemR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NTA0OTAsImV4cCI6MjA5NjAyNjQ5MH0.KEifGa_Oyn9gGwiGv-mjFOoUrWTzmkk-anHXaCaXcp8';
-
     document.getElementById('year').textContent = new Date().getFullYear();
 
     function showTab(tab) {
@@ -246,65 +247,8 @@
       document.getElementById('tab-about').classList.toggle('active', tab === 'about');
     }
 
-    async function submitForm() {
-      const firstName = document.getElementById('firstName').value.trim();
-      const lastName = document.getElementById('lastName').value.trim();
-      const email = document.getElementById('email').value.trim().toLowerCase();
-      const errorEl = document.getElementById('error');
-      const btn = document.getElementById('submitBtn');
-
-      errorEl.classList.add('hidden');
-
-      if (!email) {
-        errorEl.textContent = 'Please enter your email.';
-        errorEl.classList.remove('hidden');
-        return;
-      }
-
-      btn.disabled = true;
-      btn.textContent = 'Joining...';
-
-      try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-            'Prefer': 'return=minimal',
-          },
-          body: JSON.stringify({
-            email: email,
-            first_name: firstName,
-            last_name: lastName,
-            tier: 'domestic',
-            status: 'pending',
-          }),
-        });
-
-        if (res.ok) {
-          showSuccess();
-        } else if (res.status === 409) {
-          // duplicate email — already on the list, treat as success
-          showSuccess();
-        } else {
-          const text = await res.text();
-          console.error('Waitlist error:', res.status, text);
-          errorEl.textContent = 'Something went wrong. Please try again.';
-          errorEl.classList.remove('hidden');
-          btn.disabled = false;
-          btn.textContent = 'Join the Waitlist';
-        }
-      } catch (err) {
-        console.error(err);
-        errorEl.textContent = 'Something went wrong. Please try again.';
-        errorEl.classList.remove('hidden');
-        btn.disabled = false;
-        btn.textContent = 'Join the Waitlist';
-      }
-    }
-
-    function showSuccess() {
+    // Show thank-you view after returning from Stripe checkout
+    if (new URLSearchParams(window.location.search).get('subscribed') === '1') {
       document.getElementById('form-view').classList.add('hidden');
       document.getElementById('success-view').classList.remove('hidden');
     }
