@@ -167,38 +167,40 @@
   <main>
     <div class="header">
       <img src="banner.png" alt="Something for Sundays" class="banner" />
-      <p class="tagline">Exploring spirituality, creativity, and thoughtful living post faith deconstruction ✨</p>
       <p class="product-line">A pocket devotional mailed to your door each month — exploring spiritual practices from around the world.</p>
     </div>
 
     <!-- HOME TAB -->
     <div id="home">
       <div id="form-view">
-        <img src="IMG_6231.JPG" alt="Something for Sundays Vol. 1" class="hero-photo" style="margin-bottom:1.25rem;" />
         <div class="card notice">
-          Subscriptions are open! Choose your plan below — delivered to your door each month.
+          Subscriptions are open! Choose your plan below — delivered to your door each month.<br />
+          <strong id="deadline-line"></strong>
         </div>
 
         <div>
           <a class="btn btn-link" href="https://buy.stripe.com/4gMfZgfVsdQa7RB7ITd7q00">Subscribe — US · $8/month</a>
           <a class="btn btn-link btn-outline" href="https://buy.stripe.com/3cI5kCgZwfYi7RB0grd7q01">Subscribe — International · $12/month</a>
-          <img src="IMG_5342.png" alt="" style="width:100%;display:block;margin:1.25rem auto 0;opacity:0.85;" />
         </div>
+
+        <img src="photo-holding-zine.jpeg" alt="Holding the Something for Sundays zine" class="hero-photo" />
+        <img src="IMG_5342.png" alt="" style="width:100%;display:block;margin:1.25rem auto 0;opacity:0.85;" />
 
         <div class="card how">
           <h2>How it works</h2>
           <ul>
-            <li><span>›</span> A pocket devotional, mailed to your door each month</li>
-            <li><span>›</span> Exploring spiritual practices and traditions from around the world</li>
-            <li><span>›</span> Sign up by the 20th to receive next month's mail</li>
-            <li><span>›</span> Cancel anytime</li>
+            <li><span>›</span> An 8 page hand-bound pocket devotional, hand illustrated and mailed to your door each month</li>
+            <li><span>›</span> Each issue explores spiritual practices and wisdom traditions from around the world</li>
+            <li><span>›</span> Sign up by the 20th to receive next month's issue</li>
+            <li><span>›</span> Mail is sent out by the 1st of the month</li>
+            <li><span>›</span> Monthly payments; cancel anytime</li>
           </ul>
         </div>
 
         <div class="photos">
           <div class="photos-row">
-            <img src="IMG_6230.JPG" alt="Inside the devotional" />
-            <img src="IMG_6250.JPG" alt="Something for Sundays" />
+            <img src="photo-zine-cover.jpeg" alt="Something for Sundays zine cover" />
+            <img src="photo-zine-inside.jpeg" alt="Inside the zine" />
           </div>
         </div>
       </div>
@@ -239,6 +241,19 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Auto-updating subscription deadline:
+    // signups through the 20th get next month's issue; after the 20th, the deadline rolls to next month.
+    (function () {
+      const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      const now = new Date();
+      let m = now.getMonth();
+      if (now.getDate() > 20) m += 1;
+      const deadline = months[m % 12];
+      const issue = months[(m + 1) % 12];
+      document.getElementById('deadline-line').textContent =
+        'Subscribe by ' + deadline + ' 20th to receive ' + issue + "'s issue!";
+    })();
 
     function showTab(tab) {
       document.getElementById('home').classList.toggle('hidden', tab !== 'home');
