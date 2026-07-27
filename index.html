@@ -109,6 +109,30 @@
       color: var(--green);
     }
     input:focus { outline: none; border-color: var(--green); }
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(44, 62, 45, 0.2);
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: white;
+      color: var(--green);
+      min-height: 8rem;
+      resize: vertical;
+    }
+    textarea:focus { outline: none; border-color: var(--green); }
+    .field-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green-soft);
+      margin: 1rem 0 0.35rem;
+    }
+    form .field-label:first-child { margin-top: 0; }
+    .field-label small { text-transform: none; letter-spacing: normal; font-weight: 400; }
     .btn {
       width: 100%;
       padding: 1rem;
@@ -162,6 +186,7 @@
   <nav>
     <button id="tab-home" class="active" onclick="showTab('home')">Home</button>
     <button id="tab-about" onclick="showTab('about')">About</button>
+    <button id="tab-respond" onclick="showTab('respond')">Reader Response</button>
   </nav>
 
   <main>
@@ -212,6 +237,39 @@
       </div>
     </div>
 
+    <!-- READER RESPONSE TAB -->
+    <div id="respond" class="hidden">
+      <div id="respond-form-view">
+        <div class="card notice">
+          I'd love to hear from you! Send in questions, comments, what you thought about this issue, or what you're hoping for next. Responses can be anonymous — just know that by submitting, there's a chance your words show up in a future Substack post or zine. :)
+        </div>
+
+        <div class="card">
+          <form id="respond-form">
+            <label class="field-label" for="respond-message">Your response</label>
+            <textarea id="respond-message" name="message" required placeholder="Questions, comments, thoughts, hopes…"></textarea>
+
+            <label class="field-label" for="respond-name">Name <small>(optional)</small></label>
+            <input id="respond-name" name="name" type="text" placeholder="Leave blank to stay anonymous" />
+
+            <label class="field-label" for="respond-email">Email <small>(optional)</small></label>
+            <input id="respond-email" name="email" type="email" placeholder="If you'd like a reply" />
+
+            <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+
+            <button class="btn" type="submit" id="respond-btn">Send it in</button>
+            <p class="error hidden" id="respond-error">Something went wrong sending your response — please try again in a moment.</p>
+          </form>
+        </div>
+      </div>
+
+      <div id="respond-success-view" class="card success hidden">
+        <div class="icon">💌</div>
+        <h2>Thank you!</h2>
+        <p>Your response is on its way. It might just show up in a future Substack post or zine. ✨</p>
+      </div>
+    </div>
+
     <!-- ABOUT TAB -->
     <div id="about" class="hidden">
       <div class="card" style="display:flex;flex-direction:column;gap:1rem;">
@@ -256,11 +314,42 @@
     })();
 
     function showTab(tab) {
-      document.getElementById('home').classList.toggle('hidden', tab !== 'home');
-      document.getElementById('about').classList.toggle('hidden', tab !== 'about');
-      document.getElementById('tab-home').classList.toggle('active', tab === 'home');
-      document.getElementById('tab-about').classList.toggle('active', tab === 'about');
+      ['home', 'about', 'respond'].forEach(function (t) {
+        document.getElementById(t).classList.toggle('hidden', t !== tab);
+        document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+      });
     }
+
+    // Reader Response form → FormSubmit.co → somethingforsundays.mail@gmail.com
+    document.getElementById('respond-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const btn = document.getElementById('respond-btn');
+      const errEl = document.getElementById('respond-error');
+      errEl.classList.add('hidden');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      try {
+        const res = await fetch('https://formsubmit.co/ajax/somethingforsundays.mail@gmail.com', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            _subject: 'New reader response — Something for Sundays',
+            _template: 'box',
+            message: document.getElementById('respond-message').value,
+            name: document.getElementById('respond-name').value || '(anonymous)',
+            email: document.getElementById('respond-email').value || '(not provided)',
+            _honey: this.elements['_honey'].value
+          })
+        });
+        if (!res.ok) throw new Error('send failed');
+        document.getElementById('respond-form-view').classList.add('hidden');
+        document.getElementById('respond-success-view').classList.remove('hidden');
+      } catch (err) {
+        errEl.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Send it in';
+      }
+    });
 
     // Show thank-you view after returning from Stripe checkout
     if (new URLSearchParams(window.location.search).get('subscribed') === '1') {
